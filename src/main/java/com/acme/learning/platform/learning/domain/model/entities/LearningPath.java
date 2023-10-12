@@ -2,6 +2,7 @@ package com.acme.learning.platform.learning.domain.model.entities;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PersistenceUnit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,5 +26,23 @@ public class LearningPath {
         Long currentLastItemId = size > 0 ? learningPathItems.get(size-1).getId(): null;
         LearningPathItem learningPathItem = new LearningPathItem(tutorial, currentLastItemId);
         learningPathItems.add(learningPathItem);
+    }
+
+    public Long getFirstTutorialIdInLearning(){
+        return learningPathItems.get(0).getTutorial().getId();
+    }
+    public Tutorial getNextTutorialInLearningPath(Long currentTutorialId){
+        Long itemId=learningPathItems.stream()
+                .filter(learningPathItem -> learningPathItem.getTutorial().getId().equals(currentTutorialId))
+                .findFirst().map(LearningPathItem::getNextItemId).orElse(null);
+
+        return itemId!=null?getLearningPathItemWithTutorialId(itemId).getTutorial():null;
+    }
+    private LearningPathItem getLearningPathItemWithTutorialId(Long tutorialId){
+        return learningPathItems.stream().filter(learningPathItem -> learningPathItem.getTutorial().getId().equals(tutorialId))
+                .findFirst().orElse(null);
+    }
+    public boolean isLastTutorialInLearningPath(Long currentTutorialId){
+        return getLearningPathItemWithTutorialId(currentTutorialId).getNextItemId()==null;
     }
 }
