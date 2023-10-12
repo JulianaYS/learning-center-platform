@@ -6,6 +6,7 @@ import com.acme.learning.platform.profiles.domain.model.valueobjects.StreetAddre
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
 import java.util.Date;
@@ -22,7 +23,10 @@ public class Profile extends AbstractAggregateRoot {
     private EmailAddress email;
     @Embedded
     private StreetAddress address;
+
     @CreatedDate
+    private Date createdAt;
+    @LastModifiedDate
     private Date updatedAt;
 
     public Profile(String firstName,String lastName,String email,String street,String number,String city,String zipCode,String country){
