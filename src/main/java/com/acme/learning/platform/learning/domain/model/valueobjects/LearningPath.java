@@ -40,11 +40,18 @@ public class LearningPath {
 
         return itemId!=null?getLearningPathItemWithTutorialId(itemId).getTutorial():null;
     }
+    private LearningPathItem getLearningPathItemWithId(Long itemId){
+        return learningPathItems.stream().filter(learningPathItem -> learningPathItem.getId().equals(itemId)).findFirst().orElse(null);
+    }
     private LearningPathItem getLearningPathItemWithTutorialId(Long tutorialId){
         return learningPathItems.stream().filter(learningPathItem -> learningPathItem.getTutorial().getId().equals(tutorialId))
                 .findFirst().orElse(null);
     }
     public boolean isLastTutorialInLearningPath(Long currentTutorialId){
         return getLearningPathItemWithTutorialId(currentTutorialId).getNextItemId()==null;
+    }
+    public LearningPathItem getLastItemInLearning(){
+        return learningPathItems.stream().filter(item->item.getNextItemId()==null)
+                .findFirst().orElse(null);
     }
 }
